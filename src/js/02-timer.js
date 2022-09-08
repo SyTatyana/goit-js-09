@@ -1,7 +1,16 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import Notiflix from 'notiflix';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
+const refs = {
+  btnStart: document.querySelector('[data-start]'),
+  input: document.querySelector('#datetime-picker'),
+  spanDay: document.querySelector('[data-days]'),
+  spanHours: document.querySelector('[data-hours]'),
+  spanMinutes: document.querySelector('[data-minutes]'),
+  spanSeconds: document.querySelector('[data-seconds]'),
+};
+
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -9,12 +18,12 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     console.log(selectedDates[0]);
+
     if (selectedDates[0] < new Date()) {
-      Notiflix.Notify.failure('Please choose a date in the future');
+      Notify.failure('Please choose a date in the future');
     } else {
-      Notiflix.Notify.success('Click Start');
-      refs.bntStart.disabled = false;
-      refs.bntStart.addEventListener('click', () => {
+      refs.btnStart.removeAttribute('disabled', 'disabled');
+      refs.btnStart.addEventListener('click', () => {
         let timeId = setInterval(() => {
           const saveDate = convertMs(selectedDates[0] - new Date());
           refs.spanDay.textContent = saveDate.days;
@@ -30,16 +39,7 @@ const options = {
   },
 };
 
-const refs = {
-  bntStart: document.querySelector('[data-start]'),
-  input: document.querySelector('#datetime-picker'),
-  spanDay: document.querySelector('[data-days]'),
-  spanHours: document.querySelector('[data-hours]'),
-  spanMinutes: document.querySelector('[data-minutes]'),
-  spanSeconds: document.querySelector('[data-seconds]'),
-};
-
-refs.bntStart.disabled = true;
+refs.btnStart.disabled = true;
 
 function addLeadingZero(value) {
   return String(value).padStart(2, '0');
